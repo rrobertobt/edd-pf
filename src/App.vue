@@ -157,5 +157,7 @@ const processFiles = (dialogShow) => {
 <style>
 * {
   font-family: "DM Sans", sans-serif;
+  color-scheme: dark light;
 }
+
 </style>

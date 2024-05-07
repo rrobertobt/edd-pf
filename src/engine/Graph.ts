@@ -12,7 +12,6 @@ interface TrafficInterval {
 
 export class Edge {
   trafficIntervals: TrafficInterval[] = [];
-
   constructor(public origin: GraphNode, public destination: GraphNode, public vehicleTime: number, public walkingTime: number, public gasConsumption: number, public physicalWear: number, public distance: number) { }
 }
 
