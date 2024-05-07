@@ -1,7 +1,7 @@
 <template>
   <v-app
     style="min-height: 100vh;"
-    theme="light"
+    theme="dark"
   >
     <v-main>
       <v-snackbar v-model="snackbar">
@@ -112,16 +112,16 @@ const processFiles = (dialogShow) => {
     // console.log(e.target.result);
     routeResult = e.target.result;
     try {
-      sbMessage.value = "Archivos procesados correctamente";
       snackbar.value = true;
       routeFile.value = null;
-      trafficFile.value = null;
+      // trafficFile.value = null;
       dialogShow.value = false;
-  
+      
       const lines = routeResult.split("\n");
       currentGraph.value.buildGraph(lines)
       // console.log(currentGraph.value.generateDotGraph());  
       mainApp.value.renderGraph();
+      sbMessage.value = "Archivos de rutas procesados correctamente";
     } catch (err) {
       console.error(err);
       sbMessage.value = "Error al procesar los archivos";
@@ -129,10 +129,26 @@ const processFiles = (dialogShow) => {
     }
   };
   routeReader.readAsText(routeFile.value);
-  // trafficReader.onload = () => {
-  //   trafficResult = trafficReader.result;
-  // };
-  // trafficReader.readAsText(trafficFile.value);
+
+  trafficReader.onload = (e) => {
+    trafficResult = e.target.result;
+    try {
+      snackbar.value = true;
+      // routeFile.value = null;
+      trafficFile.value = null;
+      dialogShow.value = false;
+      const lines = trafficResult.split("\n");
+      currentGraph.value.updateTrafficData(lines)
+      // console.log(currentGraph.value.generateDotGraph());  
+      mainApp.value.renderGraph();
+      sbMessage.value = "Archivos de trafico procesados correctamente";
+    } catch (err) {
+      console.error(err);
+      sbMessage.value = "Error al procesar los archivos";
+      snackbar.value = true;
+    }
+  };
+  trafficReader.readAsText(trafficFile.value);
 
 
 };

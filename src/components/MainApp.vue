@@ -21,6 +21,7 @@
             Origen
           </span>
           <v-autocomplete
+            v-model="origin"
             :items="currentGraph.getNodes()"
             item-title="name"
             density="comfortable"
@@ -33,6 +34,9 @@
             Destino
           </span>
           <v-autocomplete
+            v-model="destination"
+            :items="currentGraph.getNodes()"
+            item-title="name"
             density="comfortable"
             variant="outlined"
           />
@@ -44,6 +48,7 @@
           </span>
           <v-select
             density="comfortable"
+            :items="['Vehiculo', 'Caminando']"
             variant="outlined"
           />
         </div>
@@ -51,7 +56,8 @@
           block
           variant="tonal"
           append-icon="mdi-arrow-right"
-          :disabled="!origin || !destination || !transportType"
+          :disabled="!origin || !destination"
+          @click="startTrip"
         >
           Iniciar recorrido
         </v-btn>
@@ -70,18 +76,31 @@
     </v-row>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import svgPanZoom from 'svg-pan-zoom'
 import { useCurrentSesionStore } from '../store/currentSession';
 import { storeToRefs } from 'pinia';
 import { instance } from "@viz-js/viz";
 const { currentGraph } = storeToRefs(useCurrentSesionStore())
-// const mapContainer = ref(null);
-const panZoom = ref(null);
+
+const origin = ref();
+const destination = ref();
+const transportType = ref(null);
+
+const startTrip = () => {
+  console.log('start trip');
+  currentGraph.value.showAvailableOptions(origin.value, destination.value);
+}
+
+
+
+
+
+
+
 const lastSvg = ref(null);
 const lastEventListener = ref(null);
-
 function renderGraph() {
   const mapContainer = document.querySelector('.mapContainer');
   instance().then(viz => {
@@ -95,7 +114,6 @@ function renderGraph() {
     lastEventListener.value = null;
     lastSvg.value = null;
 
-    panZoom.value = 2;
     const svg = viz.renderSVGElement(currentGraph.value.generateDotGraph(), { engine: 'circo' });
     svg.setAttribute('width', '100%');
     svg.setAttribute('height', '100%');
@@ -113,10 +131,6 @@ function renderGraph() {
   })
 }
 
-
-const origin = ref(null);
-const destination = ref(null);
-const transportType = ref(null);
 
 defineExpose({
   renderGraph
