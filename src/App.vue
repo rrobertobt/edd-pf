@@ -142,25 +142,25 @@ const processFiles = (dialogShow) => {
   };
   routeReader.readAsText(routeFile.value);
 
-  // trafficReader.onload = (e) => {
-  //   trafficResult = e.target.result;
-  //   try {
-  //     snackbar.value = true;
-  //     // routeFile.value = null;
-  //     trafficFile.value = null;
-  //     dialogShow.value = false;
-  //     const lines = trafficResult.split("\n");
-  //     currentGraph.value.updateTrafficData(lines)
-  //     // console.log(currentGraph.value.generateDotGraph());  
-  //     mainApp.value.renderGraph();
-  //     sbMessage.value = "Archivos de trafico procesados correctamente";
-  //   } catch (err) {
-  //     console.error(err);
-  //     sbMessage.value = "Error al procesar los archivos";
-  //     snackbar.value = true;
-  //   }
-  // };
-  // trafficReader.readAsText(trafficFile.value);
+  trafficReader.onload = (e) => {
+    trafficResult = e.target.result;
+    try {
+      snackbar.value = true;
+      // routeFile.value = null;
+      trafficFile.value = null;
+      dialogShow.value = false;
+      const lines = trafficResult.split("\n");
+      currentGraph.value.updateTrafficData(lines)
+      // console.log(currentGraph.value.generateDotGraph());  
+      mainApp.value.renderGraph();
+      sbMessage.value = "Archivos de trafico procesados correctamente";
+    } catch (err) {
+      console.error(err);
+      sbMessage.value = "Error al procesar los archivos";
+      snackbar.value = true;
+    }
+  };
+  trafficReader.readAsText(trafficFile.value);
 
 
 };

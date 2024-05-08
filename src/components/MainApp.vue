@@ -213,6 +213,10 @@ const startTrip = () => {
     routes.allPossibleRoutes.forEach(route => currentBTree.value.insert(route.map(edge => edge.origin.name).concat(route[route.length - 1].destination.name).join(' = ')));
     bestRouteDot.value = routes.bestRouteDot;
     worstRouteDot.value = routes.worstRouteDot;
+  } else {
+    emits('snackbar', { message: `No hay rutas posibles de ${origin.value} a ${destination.value}` });
+    bestRoute.value = undefined;
+    worstRoute.value = undefined;
   }
 }
 
