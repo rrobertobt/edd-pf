@@ -145,7 +145,7 @@ export class BTree<T> {
   };
 
   const generateNodeLabel = (node: TreeNode<T>): string => {
-    const labels = node.keys.map((key) => key.value).join(' | ');
+    const labels = node.keys.map((key) => key.value as string + ' (id:) ' +  key.id).join(' | ');
     return `<f0> |<f1> ${labels} |<f2>`;
   };
 

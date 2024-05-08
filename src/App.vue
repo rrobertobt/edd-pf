@@ -1,14 +1,18 @@
 <template>
   <v-app
     style="min-height: 100vh;"
-    theme="dark"
+    :theme="theme"
   >
     <v-main>
       <v-snackbar v-model="snackbar">
         {{ sbMessage }}
       </v-snackbar>
       <h2 class="text-center py-6">
-        <v-icon>mdi-map-outline</v-icon>
+        <v-icon
+          @click="() => theme = theme === 'dark' ? 'light' : 'dark'"
+        >
+          mdi-map-outline
+        </v-icon>
         TravelMap GT
         <v-menu>
           <template #activator="{ props }">
@@ -79,7 +83,13 @@
           </v-list>
         </v-menu>
       </h2>
-      <MainApp ref="mainApp" />
+      <MainApp
+        ref="mainApp" 
+        @snackbar="($event)=>{
+          sbMessage = $event.message;
+          snackbar = true;
+        }"
+      />
     </v-main>
   </v-app>
 </template>
@@ -90,6 +100,8 @@ import { ref } from "vue";
 import { useCurrentSesionStore } from "./store/currentSession";
 import { storeToRefs } from "pinia";
 import { Graph } from "./engine/Graph";
+
+const theme = ref("light");
 
 const mainApp = ref(null);
 
@@ -130,25 +142,25 @@ const processFiles = (dialogShow) => {
   };
   routeReader.readAsText(routeFile.value);
 
-  trafficReader.onload = (e) => {
-    trafficResult = e.target.result;
-    try {
-      snackbar.value = true;
-      // routeFile.value = null;
-      trafficFile.value = null;
-      dialogShow.value = false;
-      const lines = trafficResult.split("\n");
-      currentGraph.value.updateTrafficData(lines)
-      // console.log(currentGraph.value.generateDotGraph());  
-      mainApp.value.renderGraph();
-      sbMessage.value = "Archivos de trafico procesados correctamente";
-    } catch (err) {
-      console.error(err);
-      sbMessage.value = "Error al procesar los archivos";
-      snackbar.value = true;
-    }
-  };
-  trafficReader.readAsText(trafficFile.value);
+  // trafficReader.onload = (e) => {
+  //   trafficResult = e.target.result;
+  //   try {
+  //     snackbar.value = true;
+  //     // routeFile.value = null;
+  //     trafficFile.value = null;
+  //     dialogShow.value = false;
+  //     const lines = trafficResult.split("\n");
+  //     currentGraph.value.updateTrafficData(lines)
+  //     // console.log(currentGraph.value.generateDotGraph());  
+  //     mainApp.value.renderGraph();
+  //     sbMessage.value = "Archivos de trafico procesados correctamente";
+  //   } catch (err) {
+  //     console.error(err);
+  //     sbMessage.value = "Error al procesar los archivos";
+  //     snackbar.value = true;
+  //   }
+  // };
+  // trafficReader.readAsText(trafficFile.value);
 
 
 };
